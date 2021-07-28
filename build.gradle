@@ -24,7 +24,7 @@ subprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group = 'gg.solarmc.worldguard'
-    version = '6.2.2-SNAPSHOT'
+    version = '6.2.2'
     ext.internalVersion = version + ";" + gitCommitHash
 
     sourceCompatibility = 16
