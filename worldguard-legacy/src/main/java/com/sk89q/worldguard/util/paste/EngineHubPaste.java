@@ -20,8 +20,6 @@
 package com.sk89q.worldguard.util.paste;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.sk89q.worldguard.util.net.HttpRequest;
-import com.sk89q.worldguard.util.net.HttpRequest.Form;
 import org.json.simple.JSONValue;
 
 import java.io.IOException;
@@ -49,30 +47,7 @@ public class EngineHubPaste implements Paster {
 
         @Override
         public URL call() throws IOException, InterruptedException {
-            Form form = Form.create();
-            form.add("content", content);
-            form.add("from", "worldguard");
-
-            URL url = HttpRequest.url("http://paste.enginehub.org/paste");
-            String result = HttpRequest.post(url)
-                    .bodyForm(form)
-                    .execute()
-                    .expectResponseCode(200)
-                    .returnContent()
-                    .asString("UTF-8").trim();
-
-            Object object = JSONValue.parse(result);
-            if (object instanceof Map) {
-                @SuppressWarnings("unchecked")
-                String urlString = String.valueOf(((Map<Object, Object>) object).get("url"));
-                Matcher m = URL_PATTERN.matcher(urlString);
-
-                if (m.matches()) {
-                    return new URL(urlString);
-                }
-            }
-
-            throw new IOException("Failed to save paste; instead, got: " + result);
+            throw new IllegalStateException("Please make pastes yourself - Solar"); // Solar
         }
     }
 

@@ -20,8 +20,6 @@
 package com.sk89q.worldguard.util.paste;
 
 import com.google.common.util.concurrent.ListenableFuture;
-import com.sk89q.worldguard.util.net.HttpRequest;
-import com.sk89q.worldguard.util.net.HttpRequest.Form;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,33 +59,7 @@ public class Pastebin implements Paster {
 
         @Override
         public URL call() throws IOException, InterruptedException {
-            Form form = Form.create();
-            form.add("api_option", "paste");
-            form.add("api_dev_key", "4867eae74c6990dbdef07c543cf8f805");
-            form.add("api_paste_code", content);
-            form.add("api_paste_private", "0");
-            form.add("api_paste_name", "");
-            form.add("api_paste_expire_date", "1W");
-            form.add("api_paste_format", "text");
-            form.add("api_user_key", "");
-
-            URL url = HttpRequest.url("http://pastebin.com/api/api_post.php");
-            String result = HttpRequest.post(url)
-                    .bodyForm(form)
-                    .execute()
-                    .expectResponseCode(200)
-                    .returnContent()
-                    .asString("UTF-8").trim();
-
-            Matcher m = URL_PATTERN.matcher(result);
-
-            if (m.matches()) {
-                return new URL("http://pastebin.com/raw.php?i=" + m.group(1));
-            } else if (result.matches("^https?://.+")) {
-                return new URL(result);
-            } else {
-                throw new IOException("Failed to save paste; instead, got: " + result);
-            }
+            throw new IllegalStateException("Please make pastes yourself - Solar"); // Solar
         }
     }
     

@@ -1,40 +1,43 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 
-project.version = '6.2.2-SNAPSHOT'
 ext.internalVersion = project.version + ";" + gitCommitHash
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
-checkstyle.configFile = new File(projectDir, "config/checkstyle/checkstyle.xml")
-
 dependencies {
-    compile 'org.khelekore:prtree:1.5.0'
-    compile 'org.bukkit:bukkit:1.12-R0.1-SNAPSHOT'
-    compile 'com.sk89q.worldedit:worldedit-bukkit:6.1.3-SNAPSHOT'
-    compile 'com.sk89q:squirrelid:0.1.0'
-    compile 'org.flywaydb:flyway-core:3.0'
-    compile ('com.sk89q:commandbook:2.3') {
+    implementation 'org.khelekore:prtree:1.5.0'
+    implementation "gg.solarmc.paper:solarpaper-api:1.2.0"
+    implementation ("com.google.guava:guava") {
+        version {
+            strictly "21.0"
+        }
+    }
+    implementation "gg.solarmc.worldedit:worldedit-bukkit:6.1.9"
+    implementation 'com.sk89q:squirrelid:0.1.0'
+    implementation 'org.flywaydb:flyway-core:3.0'
+    implementation ('com.sk89q:commandbook:2.3') {
+        exclude group: "org.bukkit", module: "bukkit"
         exclude group: 'com.sk89q', module: 'worldedit'
         exclude group: 'com.zachsthings.libcomponents'
     }
-    compile 'net.sf.opencsv:opencsv:2.0'
-    compile 'com.googlecode.json-simple:json-simple:1.1.1'
-    compile 'com.google.code.findbugs:jsr305:1.3.9'
-    testCompile 'junit:junit:4.11'
-    testCompile 'org.hamcrest:hamcrest-library:1.2.1'
+    implementation 'net.sf.opencsv:opencsv:2.0'
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+    implementation 'com.google.code.findbugs:jsr305:1.3.9'
+    testImplementation 'junit:junit:4.11'
+    testImplementation 'org.hamcrest:hamcrest-library:1.2.1'
 }
 
 processResources {
-    from (sourceSets.main.resources.srcDirs) {
-        expand project.properties
-        include 'plugin.yml'
-    }
+    filter ReplaceTokens, tokens: [
+        "project.internalVersion" : project.internalVersion
+    ]
+}
 
-    from (sourceSets.main.resources.srcDirs) {
-        exclude 'plugin.yml'
-    }
+jar {
+    manifest {
+        attributes("Automatic-Module-Name" : "com.sk89q.worldguard")
+   }
 }
 
 shadowJar {
