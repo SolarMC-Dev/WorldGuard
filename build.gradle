@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "pl.allegro.tech.build.axion-release" version "1.13.3"
+}
+
 if (!project.hasProperty("gitCommitHash")) {
     try {
         def repo = org.ajoberstar.grgit.Grgit.open(project.file('.'))
@@ -24,7 +28,7 @@ subprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     group = 'gg.solarmc.worldguard'
-    version = '6.2.2'
+    version = scmVersion.version
     ext.internalVersion = version + ";" + gitCommitHash
 
     sourceCompatibility = 16
